@@ -1,0 +1,10 @@
+Ecuacion 1: No se puede realizar
+
+Ecuacion 2: (A+B)+B
+Resultado:
+[['234678678' '567901901' '890234234']
+ ['123543543' '456210210' '789987987']
+ ['987109109' '654876876' '321543543']]
+Ecuacion 3: No se puede realizar
+Ecuacion 4: No se puede realizar
+Ecuacion 5: No se puede realizar
