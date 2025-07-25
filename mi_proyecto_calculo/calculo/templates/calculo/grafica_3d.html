@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfica 3D de Puntos</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; text-align: center; }
+        h1 { color: #333; }
+        .error { color: red; font-weight: bold; }
+        #grafica-3d-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        #grafica-3d-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+        /* Nuevos estilos para la sección de distancias */
+        .distances-section {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #cce;
+            border-radius: 8px;
+            background-color: #f9f9ff;
+            text-align: left;
+        }
+        .distances-section h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .distances-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .distances-section li {
+            background-color: #eef;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Gráfica 3D de Puntos desde Archivo</h1>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+
+    {% if puntos %}
+        <p>Puntos leídos correctamente:</p>
+        <ul>
+            {% for punto in puntos %}
+                <li>Punto {{ forloop.counter }}: ({{ punto.0 }}, {{ punto.1 }}, {{ punto.2 }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se encontraron puntos válidos para mostrar.</p>
+    {% endif %}
+
+    {% if distances %}
+        <div class="distances-section">
+            <h2>Distancias entre Puntos</h2>
+            <ul>
+                {% for pair in distances %}
+                    <li>Distancia entre {{ pair.point1 }} y {{ pair.point2 }}: <strong>{{ pair.distance }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% elif puntos|length < 2 and not error_message %}
+        <div class="distances-section">
+            <p>Necesitas al menos 2 puntos para calcular distancias.</p>
+        </div>
+    {% endif %}
+    <div id="grafica-3d-container">
+        {% if graph_image_base64 %}
+            <img src="data:image/png;base64,{{ graph_image_base64 }}" alt="Gráfica 3D de Puntos">
+        {% else %}
+            <p>No hay gráfica disponible.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,2 +1,0 @@
-Solucion del sistema de ecuaciones:
-x = 0.023181, y = 0.004477, z = 0.207556

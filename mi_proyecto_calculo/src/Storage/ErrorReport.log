@@ -1,0 +1,71 @@
+
+ErrorLog[2025-07-24_21-08-54_serial38]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-08-54_serial9]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-08-54_serial71]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-09-12_serial43]:ERROR:El numero no es un numero binario valido.1
+ErrorLog[2025-07-24_21-09-12_serial53]:ERROR:El numero no es un numero binario valido.1
+ErrorLog[2025-07-24_21-09-12_serial77]:ERROR:El numero no es un numero binario valido.1
+ErrorLog[2025-07-24_21-11-25_serial16]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-11-25_serial77]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-11-25_serial52]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-11-38_serial86]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-11-38_serial26]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-11-38_serial71]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-20-17_serial7]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-20-17_serial38]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-20-17_serial45]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-45-10_serial5]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-46-08_serial76]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-46-26_serial4]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-47-20_serial85]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-47-41_serial76]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-48-09_serial52]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-48-49_serial55]:Error al procesar archivo: cannot access local variable 'num' where it is not associated with a value
+ErrorLog[2025-07-24_21-49-54_serial97]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-49-54_serial85]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-49-54_serial85]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-04_serial88]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-04_serial65]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-04_serial36]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-52_serial16]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-52_serial53]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-52-52_serial61]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-53-33_serial12]:Error en la suma decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-53-33_serial27]:Error en la resta decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-53-33_serial67]:Error en la multiplicacion decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-53-33_serial54]:Error en la division decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-53-33_serial28]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-53-33_serial60]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-53-33_serial93]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-53-33_serial73]:Error en Gauss-Jordan: could not convert string to float: np.str_('None')
+ErrorLog[2025-07-24_21-55-37_serial25]:Error en la suma decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-55-37_serial26]:Error en la resta decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-55-37_serial36]:Error en la multiplicacion decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-55-37_serial48]:Error en la division decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_21-55-37_serial97]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-55-37_serial79]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-55-37_serial32]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_21-55-37_serial70]:Error en Gauss-Jordan: could not convert string to float: np.str_('None')
+ErrorLog[2025-07-24_22-35-09_serial10]:Error en la suma decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_22-35-09_serial14]:Error en la resta decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_22-35-09_serial68]:Error en la multiplicacion decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_22-35-09_serial72]:Error en la division decimal: could not convert string to float: '1.2.345'
+ErrorLog[2025-07-24_22-35-09_serial82]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-35-09_serial14]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-35-09_serial59]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-35-09_serial62]:Error en Gauss-Jordan: could not convert string to float: np.str_('None')
+ErrorLog[2025-07-24_22-36-06_serial1]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-36-06_serial71]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-36-06_serial26]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-36-39_serial40]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-36-39_serial15]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-36-39_serial72]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-38-21_serial65]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-38-21_serial71]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_22-38-21_serial40]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_23-16-00_serial32]:Error al procesar archivo: El directorio a guardar no existe.
+ErrorLog[2025-07-24_23-16-14_serial5]:Error al procesar archivo: El directorio a guardar no existe.
+ErrorLog[2025-07-24_23-16-29_serial18]:Error al procesar archivo: El directorio a guardar no existe.
+ErrorLog[2025-07-24_23-17-32_serial56]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_23-17-32_serial9]:ERROR:El numero no es un numero binario valido.
+ErrorLog[2025-07-24_23-17-32_serial25]:ERROR:El numero no es un numero binario valido.
