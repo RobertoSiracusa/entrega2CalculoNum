@@ -129,7 +129,7 @@ class significantFigures:
     def toString(self):
         return f"Numero: {self.number} Cifras Significativas: {self.significantFigures} Forma Normalizada: {self.normalizedForm}"
     
-    # Getters
+
     def getNumber(self):
         return self.number
     
@@ -139,7 +139,7 @@ class significantFigures:
     def getNormalizedForm(self):
         return self.normalizedForm
     
-    # Setters
+
     def setNumber(self, number):
         self.number = str(number)
         self.checkDecimalSystem()

@@ -32,7 +32,7 @@ class GaussJordan:
         self.finalSolution = "No resuelto"
         self.resolveMatrix()
 
-        # Advertencias sobre el tamaño del sistema
+
         if self.nRows > self.nCols - 1:
             errorMsg = "El sistema puede estar sobredeterminado o no tener solucion unica."
             logWriter(errorMsg,True)
