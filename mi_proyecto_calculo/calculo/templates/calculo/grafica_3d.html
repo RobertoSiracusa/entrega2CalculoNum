@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo Numérico - Gráfica 3D</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; text-align: center; background-color: #f5f5f5; }
+        h1 { color: #333; margin-bottom: 30px; }
+        .error { color: red; font-weight: bold; }
+        
+        /* Estilos para el panel de control */
+        .control-panel {
+            background-color: white;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .execution-counter {
+            background-color: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .execution-counter.max-reached {
+            background-color: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        /* Estilos para botones */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        .btn:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+        
+        /* Estilos para mensajes */
+        .messages {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        
+        .message {
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .message.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .message.warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .message.info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        #grafica-3d-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background-color: white;
+            border-radius: 8px;
+        }
+        #grafica-3d-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+        /* Nuevos estilos para la sección de distancias */
+        .distances-section {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #cce;
+            border-radius: 8px;
+            background-color: #f9f9ff;
+            text-align: left;
+        }
+        .distances-section h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .distances-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .distances-section li {
+            background-color: #eef;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .points-section {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+        
+        .points-section h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        /* Estilos para la sección de archivos */
+        .files-section {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+        
+        .files-section h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .files-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .files-table th,
+        .files-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .files-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .files-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .download-btn:hover {
+            background-color: #218838;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .file-type-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .file-type-texto {
+            background-color: #007bff;
+        }
+        
+        .file-type-binario {
+            background-color: #6c757d;
+        }
+        
+        .file-type-otro {
+            background-color: #ffc107;
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cálculo Numérico - Gráfica 3D de Puntos</h1>
+
+
+    <div class="control-panel">
+        <h2>Panel de Control</h2>
+        
+
+        <div class="execution-counter {% if not can_execute %}max-reached{% endif %}">
+            {% if can_execute %}
+                Ejecuciones disponibles: {{ execution_count }}/{{ max_executions }}
+            {% else %}
+                Máximo de ejecuciones alcanzado: {{ execution_count }}/{{ max_executions }}
+            {% endif %}
+        </div>
+        
+
+        <form method="post" action="{% url 'calculo:ejecutar_main' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary" {% if not can_execute %}disabled{% endif %}>
+                Ejecutar Programa de Cálculo
+            </button>
+        </form>
+        
+        <form method="post" action="{% url 'calculo:reset_counter' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary">
+                Resetear Contador
+            </button>
+        </form>
+        
+        <p style="margin-top: 15px; color: #666; font-size: 14px;">
+            <strong>Tip:</strong> Cada ejecución genera nuevas matrices aleatorias y calcula nuevas coordenadas.
+        </p>
+    </div>
+
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="message error">{{ error_message }}</div>
+    {% endif %}
+
+
+    {% if puntos %}
+        <div class="points-section">
+            <h2>Puntos Generados</h2>
+            <ul>
+                {% for punto in puntos %}
+                    <li><strong>Punto {{ forloop.counter }}:</strong> ({{ punto.0|floatformat:6 }}, {{ punto.1|floatformat:6 }}, {{ punto.2|floatformat:6 }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="points-section">
+            <p style="text-align: center;">No se encontraron puntos válidos para mostrar. Ejecuta el programa para generar datos.</p>
+        </div>
+    {% endif %}    
+
+    <div id="grafica-3d-container">
+        <h2 style="padding: 15px; margin: 0; background-color: #f8f9fa; border-bottom: 1px solid #ddd;">Gráfica 3D</h2>
+        {% if graph_image_base64 %}
+            <img src="data:image/png;base64,{{ graph_image_base64 }}" alt="Gráfica 3D de Puntos">
+        {% else %}
+            <p style="padding: 40px; color: #666;">No hay gráfica disponible. Ejecuta el programa para generar datos.</p>
+        {% endif %}
+    </div>
+ 
+     {% if distances %}
+     <div class="distances-section">
+         <h2>Distancias entre Puntos</h2>
+         <ul>
+             {% for pair in distances %}
+                 <li>Distancia entre {{ pair.point1 }} y {{ pair.point2 }}: <strong>{{ pair.distance }}</strong></li>
+             {% endfor %}
+         </ul>
+     </div>
+ {% elif puntos|length < 2 and not error_message %}
+     <div class="distances-section">
+         <p style="text-align: center;">Necesitas al menos 2 puntos para calcular distancias.</p>
+     </div>
+ {% endif %}
+ 
+
+    <div class="files-section">
+        <h2>Archivos de Storage</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #666;">
+            Archivos generados por el programa de cálculo numérico. Haz clic en "Descargar" para obtener cualquier archivo.
+        </p>
+        
+        {% if storage_files %}
+            <table class="files-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Archivo</th>
+                        <th>Tipo</th>
+                        <th>Tamaño</th>
+                        <th>Fecha de Modificación</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in storage_files %}
+                        <tr>
+                            <td>
+                                <strong>{{ file.name }}</strong>
+                            </td>
+                            <td>
+                                <span class="file-type-badge file-type-{% if file.type == 'Texto' %}texto{% elif file.type == 'Binario' %}binario{% else %}otro{% endif %}">
+                                    {{ file.type }}
+                                </span>
+                            </td>
+                            <td>{{ file.size }}</td>
+                            <td>{{ file.modified }}</td>
+                            <td>
+                                <a href="{% url 'calculo:download_file' file.name %}" class="download-btn">
+                                    Descargar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; color: #666;">
+                No hay archivos disponibles en el directorio Storage. Ejecuta el programa para generar archivos.
+            </p>
+        {% endif %}
+    </div>
+</body>
+</html>
