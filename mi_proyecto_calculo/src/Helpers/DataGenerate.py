@@ -93,21 +93,18 @@ class archiveGenerator():
         
         self.__router = router
 
-# --- Pequeño main para ejecutar la clase ---
-if __name__ == "__main__":
-    # Define la ruta donde quieres guardar los archivos
-    output_directory = "src\\Storage\\" # ¡MODIFICA ESTA RUTA A TU PREFERENCIA!
 
-    for i in range(1, 4): # Bucle para generar 3 archivos
+if __name__ == "__main__":
+    output_directory = "src\\Storage\\"
+
+    for i in range(1, 4):
         file_name = f"randomFile{i}.bin"
         
         try:
-            # Crea una instancia de archiveGenerator para cada archivo
-            # Asegúrate de pasar el nombre del archivo y el router al constructor
+            
             generator = archiveGenerator(nameArchive=file_name, router=output_directory)
             
-            # Genera datos aleatorios en el archivo
-            generator.archiveDataGenerator(row=3, colum=3) # Puedes ajustar el tamaño de la matriz
+            generator.archiveDataGenerator(row=3, colum=3)
             print(f"Archivo '{file_name}' generado exitosamente en '{output_directory}'")
         except Exception as e:
             print(f"Error al generar el archivo '{file_name}': {e}")
