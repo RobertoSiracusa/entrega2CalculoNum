@@ -1,9 +1,12 @@
+import os
+import numpy as np
 import Repositories.archiveUtil as ArchiveUtil 
 import random
 import datetime
 
-def logWriter(content,append_newLine):
-    pathToFile = "mi_proyecto_calculo/src/Storage"
+def logWriter(content, appendNewLine):
+    scriptDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pathToFile = os.path.join(scriptDir, "Storage")
     archive = ArchiveUtil.ArchiveUtil(pathToFile)
 
     currentDateTime = datetime.datetime.now()
@@ -12,11 +15,46 @@ def logWriter(content,append_newLine):
     outputLogFileName = f"ErrorLog[{formattedDateTime}_serial{randNum}]:"
     logFileName="ErrorReport"
 
-    archive.setCreateArchiveLog(content,logFileName,outputLogFileName,append_newLine)
+    archive.setCreateArchiveLog(content,logFileName,outputLogFileName,appendNewLine)
 
-def txtWriter(outputFileName, content, append_newLine=True):
-    pathToFile = "mi_proyecto_calculo/src/Storage"
+def txtWriter(outputFileName, content, appendNewLine=True):
+    scriptDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pathToFile = os.path.join(scriptDir, "Storage")
     archive = ArchiveUtil.ArchiveUtil(pathToFile)
 
+    archive.setCreateArchiveTxt(content, outputFileName, appendNewLine)
 
-    archive.setCreateArchiveTxt(content, outputFileName, append_newLine)
+def format2DArray(inputArray: np.ndarray) -> str:
+        """
+        Transforms a 2D numpy array of strings into a formatted string, without using lists for intermediate storage.
+
+        Args:
+            inputArray (np.ndarray): A 2D numpy array containing string representations of numbers,
+                                      with a maximum dimension of 3x4.
+
+        Returns:
+            str: The formatted string in the format "NN#NN#NN#NN\nNN#NN#NN#NN\nNN#NN#NN#NN",
+                 or an error message if the input is invalid.
+        """
+        if not isinstance(inputArray, np.ndarray):
+            return "Error: La entrada no es un array de numpy."
+        if inputArray.ndim != 2:
+            return "Error: El array debe ser de dos dimensiones."
+        if inputArray.shape[0] > 3 or inputArray.shape[1] > 4:
+            return "Error: El array excede las dimensiones máximas permitidas (3x4)."
+
+        outputString = ""
+        for rowIdx in range(inputArray.shape[0]):
+            for colIdx in range(inputArray.shape[1]):
+                item = inputArray[rowIdx, colIdx]
+                try:
+                    num = int(item)
+                    outputString += f"{num:02d}"
+                except ValueError:
+                    return f"Error: El contenido del array debe ser convertible a número. Valor inválido: '{item}'"
+
+                if colIdx < inputArray.shape[1] - 1:
+                    outputString += "#"
+            if rowIdx < inputArray.shape[0] - 1:
+                outputString += "\n"
+        return outputString

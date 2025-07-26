@@ -94,13 +94,11 @@ class elementalOperation:
             return False
     def _detBinOperation(self):
         binNumber= self.numberString.replace(',', '.').strip()
-        # Validar si el numero es binario
+
         if not all(char in '01.' for char in binNumber):
             self.binSystem = False
             logWriter("ERROR:El numero no es un numero binario valido.", True)
-            
-        elif not self.binSystem:
-            logWriter("ERROR:El numero no es un numero binario valido.", True)
+            return
             
         elif binNumber == '0' or binNumber == '0.0':
             logWriter("ERROR:No hay operaciones disponibles para el numero 0.",True)

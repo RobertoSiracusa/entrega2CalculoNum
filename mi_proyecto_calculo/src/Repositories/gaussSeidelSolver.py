@@ -130,7 +130,7 @@ class GaussSeidelSolver:
         
         
         if saveHistory:
-            historySize = min(self.maxIterations + 1, 10000)  # Limitar memoria
+            historySize = min(self.maxIterations + 1, 10000)
             self.iterationHistory = np.zeros((historySize, self.nRows), dtype=float)
             self.iterationHistory[0, :] = currentSolution.copy()
         
@@ -258,7 +258,7 @@ class GaussSeidelSolver:
             logWriter(errorMsg, True)
             return None
         
-        # Retornar solo las iteraciones validas
+
         validIterations = self.iterations + 1 if self.iterations > 0 else 1
         return self.iterationHistory[:validIterations, :].copy()
 

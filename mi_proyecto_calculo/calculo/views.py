@@ -1,13 +1,19 @@
 # mi_proyecto_calculo/calculo/views.py
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponse, Http404
 import os
 import re
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import io
 import base64
-import math # <-- Nueva importación para funciones matemáticas (sqrt)
+import math
+import sys
+import subprocess
+import mimetypes
+import datetime
 
 def grafica_3d_view(request):
     # Define la ruta del archivo .txt
@@ -17,7 +23,14 @@ def grafica_3d_view(request):
     puntos = []
     error_message = None
     graph_image_base64 = None
-    distances = [] # <-- Lista para almacenar las distancias
+    distances = []
+    
+    # Obtener el contador de ejecuciones de la sesión
+    execution_count = request.session.get('execution_count', 0)
+    max_executions = 5
+    
+    # Obtener lista de archivos en Storage
+    storage_files = get_storage_files()
 
     try:
         with open(txt_file_path, 'r') as f:
@@ -114,6 +127,169 @@ def grafica_3d_view(request):
         'puntos': puntos,
         'error_message': error_message,
         'graph_image_base64': graph_image_base64,
-        'distances': distances, # <-- Pasamos las distancias a la plantilla
+        'distances': distances,
+        'execution_count': execution_count,
+        'max_executions': max_executions,
+        'can_execute': execution_count < max_executions,
+        'storage_files': storage_files,
     }
     return render(request, 'calculo/grafica_3d.html', context)
+
+def ejecutar_main_view(request):
+    """
+    Vista para ejecutar el programa main() del módulo de cálculo numérico
+    """
+    if request.method == 'POST':
+        # Verificar el contador de ejecuciones
+        execution_count = request.session.get('execution_count', 0)
+        max_executions = 5
+        
+        if execution_count >= max_executions:
+            messages.error(request, f'Has alcanzado el máximo de {max_executions} ejecuciones permitidas.')
+            return redirect('calculo:grafica_3d')
+        
+        try:
+            # Obtener la ruta del proyecto
+            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            main_script_path = os.path.join(project_root, 'src', 'main.py')
+            
+            # Cambiar al directorio del proyecto para la ejecución
+            original_cwd = os.getcwd()
+            os.chdir(project_root)
+            
+            try:
+                # Ejecutar el script main.py usando subprocess
+                result = subprocess.run([sys.executable, main_script_path], 
+                                      capture_output=True, 
+                                      text=True, 
+                                      cwd=project_root)
+                
+                # Incrementar el contador de ejecuciones
+                request.session['execution_count'] = execution_count + 1
+                request.session.save()
+                
+                if result.returncode == 0:
+                    messages.success(request, f'Programa ejecutado exitosamente. Ejecución #{execution_count + 1} de {max_executions}.')
+                    if result.stdout:
+                        messages.info(request, f'Salida: {result.stdout}')
+                else:
+                    messages.warning(request, f'El programa se ejecutó pero hubo advertencias. Código de salida: {result.returncode}')
+                    if result.stderr:
+                        messages.error(request, f'Errores: {result.stderr}')
+                
+            finally:
+                # Restaurar el directorio de trabajo original
+                os.chdir(original_cwd)
+                
+        except Exception as e:
+            messages.error(request, f'Error al ejecutar el programa: {str(e)}')
+    
+    return redirect('calculo:grafica_3d')
+
+def reset_execution_count_view(request):
+    """
+    Vista para reiniciar el contador de ejecuciones (útil para desarrollo/testing)
+    """
+    if request.method == 'POST':
+        request.session['execution_count'] = 0
+        request.session.save()
+        messages.success(request, 'Contador de ejecuciones reiniciado.')
+    
+    return redirect('calculo:grafica_3d')
+
+def get_storage_files():
+    """
+    Obtiene la lista de archivos en la carpeta Storage con información adicional
+    
+    Returns:
+        list: Lista de diccionarios con información de archivos
+    """
+    try:
+        # Obtener la ruta de Storage
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        storage_path = os.path.join(project_root, 'src', 'Storage')
+        
+        if not os.path.exists(storage_path):
+            return []
+        
+        files_info = []
+        for filename in os.listdir(storage_path):
+            file_path = os.path.join(storage_path, filename)
+            
+            # Solo incluir archivos (no directorios)
+            if os.path.isfile(file_path):
+                # Obtener información del archivo
+                stat = os.stat(file_path)
+                file_size = stat.st_size
+                
+                # Formatear el tamaño
+                if file_size < 1024:
+                    size_str = f"{file_size} B"
+                elif file_size < 1024 * 1024:
+                    size_str = f"{file_size / 1024:.1f} KB"
+                else:
+                    size_str = f"{file_size / (1024 * 1024):.1f} MB"
+                
+                # Obtener fecha de modificación
+                mod_time = datetime.datetime.fromtimestamp(stat.st_mtime)
+                
+                # Determinar el tipo de archivo
+                file_ext = os.path.splitext(filename)[1].lower()
+                if file_ext in ['.txt', '.log']:
+                    file_type = 'Texto'
+                elif file_ext == '.bin':
+                    file_type = 'Binario'
+                else:
+                    file_type = 'Otro'
+                
+                files_info.append({
+                    'name': filename,
+                    'size': size_str,
+                    'size_bytes': file_size,
+                    'modified': mod_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    'type': file_type,
+                    'extension': file_ext
+                })
+        
+        # Ordenar por fecha de modificación (más recientes primero)
+        files_info.sort(key=lambda x: x['modified'], reverse=True)
+        
+        return files_info
+        
+    except Exception as e:
+        return []
+
+def download_file_view(request, filename):
+    """
+    Vista para descargar archivos de la carpeta Storage
+    
+    Args:
+        filename: Nombre del archivo a descargar
+    """
+    try:
+        # Obtener la ruta del archivo
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        storage_path = os.path.join(project_root, 'src', 'Storage')
+        file_path = os.path.join(storage_path, filename)
+        
+        # Verificar que el archivo existe y está dentro de Storage (seguridad)
+        if not os.path.exists(file_path) or not file_path.startswith(storage_path):
+            raise Http404("Archivo no encontrado")
+        
+        # Verificar que es un archivo (no directorio)
+        if not os.path.isfile(file_path):
+            raise Http404("Archivo no encontrado")
+        
+        # Determinar el tipo MIME
+        mime_type, _ = mimetypes.guess_type(file_path)
+        if mime_type is None:
+            mime_type = 'application/octet-stream'
+        
+        # Leer el archivo
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type=mime_type)
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+            
+    except Exception as e:
+        raise Http404("Error al descargar el archivo")
