@@ -4,7 +4,7 @@ import math
 import datetime
 import random
 from Helpers.utils import logWriter, txtWriter
-
+ 
 def readPointsFromGaussJordan():
     """
     Lee los puntos desde el archivo GaussJordan.txt
