@@ -25,17 +25,7 @@ def txtWriter(outputFileName, content, appendNewLine=True):
     archive.setCreateArchiveTxt(content, outputFileName, appendNewLine)
 
 def format2DArray(inputArray: np.ndarray) -> str:
-        """
-        Transforms a 2D numpy array of strings into a formatted string, without using lists for intermediate storage.
-
-        Args:
-            inputArray (np.ndarray): A 2D numpy array containing string representations of numbers,
-                                      with a maximum dimension of 3x4.
-
-        Returns:
-            str: The formatted string in the format "NN#NN#NN#NN\nNN#NN#NN#NN\nNN#NN#NN#NN",
-                 or an error message if the input is invalid.
-        """
+        
         if not isinstance(inputArray, np.ndarray):
             return "Error: La entrada no es un array de numpy."
         if inputArray.ndim != 2:

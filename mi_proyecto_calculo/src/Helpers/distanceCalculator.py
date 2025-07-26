@@ -6,12 +6,7 @@ import random
 from Helpers.utils import logWriter, txtWriter
 
 def readPointsFromGaussJordan():
-    """
-    Lee los puntos desde el archivo GaussJordan.txt
     
-    Returns:
-        list: Lista de tuplas [(x, y, z), ...] o None si hay error
-    """
     try:
         scriptDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         gaussJordanFile = os.path.join(scriptDir, "Storage", "GaussJordan.txt")
@@ -34,7 +29,6 @@ def readPointsFromGaussJordan():
                 if not line:
                     continue
                 
-
                 match = re.match(r'x:([-+]?\d*\.?\d+)#y:([-+]?\d*\.?\d+)#z:([-+]?\d*\.?\d+)', line)
                 if match:
                     x, y, z = float(match.group(1)), float(match.group(2)), float(match.group(3))
@@ -49,25 +43,14 @@ def readPointsFromGaussJordan():
         return None
 
 def calculateEuclideanDistance(point1, point2):
-    """
-    Calcula la distancia euclidiana entre dos puntos 3D
-    
-    Args:
-        point1: tupla (x, y, z)
-        point2: tupla (x, y, z)
-        
-    Returns:
-        float: distancia euclidiana
-    """
+   
     x1, y1, z1 = point1
     x2, y2, z2 = point2
     
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
 
 def generateDistanceReport():
-    """
-    Genera un reporte de distancias entre todos los pares de puntos
-    """
+    
     try:
  
         points = readPointsFromGaussJordan()
@@ -109,9 +92,7 @@ def generateDistanceReport():
         return False
 
 def generateDistanceFile(distances, errorMessage=None):
-    """
-    Genera el archivo de distancias con nombre único
-    """
+    
     try:
 
         currentDateTime = datetime.datetime.now()

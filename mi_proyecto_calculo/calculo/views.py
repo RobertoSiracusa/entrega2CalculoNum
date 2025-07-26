@@ -16,7 +16,6 @@ import mimetypes
 import datetime
 
 def grafica_3d_view(request):
-    # Define la ruta del archivo .txt
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     txt_file_path = os.path.join(project_root, 'src', 'Storage', 'GaussJordan.txt')
 
@@ -25,11 +24,9 @@ def grafica_3d_view(request):
     graph_image_base64 = None
     distances = []
     
-    # Obtener el contador de ejecuciones de la sesión
     execution_count = request.session.get('execution_count', 0)
     max_executions = 5
     
-    # Obtener lista de archivos en Storage
     storage_files = get_storage_files()
 
     try:
@@ -60,25 +57,24 @@ def grafica_3d_view(request):
                     puntos = []
                     break
 
-        # --- Lógica de cálculo de distancias ---
         if puntos:
-            # Función auxiliar para calcular la distancia euclidiana entre dos puntos 3D
+            
             def calculate_distance(p1, p2):
                 return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] - p2[2])**2)
 
-            # Iterar sobre todos los pares de puntos para calcular las distancias
+            
             num_points = len(puntos)
             for i in range(num_points):
-                for j in range(i + 1, num_points): # Evita duplicados y distancia de un punto a sí mismo
-                    p1_idx = i + 1 # Para mostrar P1, P2 en lugar de P0, P1
+                for j in range(i + 1, num_points): 
+                    p1_idx = i + 1 
                     p2_idx = j + 1
                     dist = calculate_distance(puntos[i], puntos[j])
                     distances.append({
                         'point1': f'Punto {p1_idx} ({puntos[i][0]:.2f}, {puntos[i][1]:.2f}, {puntos[i][2]:.2f})',
                         'point2': f'Punto {p2_idx} ({puntos[j][0]:.2f}, {puntos[j][1]:.2f}, {puntos[j][2]:.2f})',
-                        'distance': f'{dist:.4f}' # Formatear la distancia a 4 decimales
+                        'distance': f'{dist:.4f}' 
                     })
-        # --- Fin Lógica de cálculo de distancias ---
+       
 
 
         if puntos:
@@ -88,14 +84,11 @@ def grafica_3d_view(request):
             x_coords = [p[0] for p in puntos]
             y_coords = [p[1] for p in puntos]
             z_coords = [p[2] for p in puntos]
-             # --- AÑADE ESTE BLOQUE PARA LOS COLORES ---
-        # Define una lista de colores. Asegúrate de tener suficientes colores para el máximo de 5 puntos.
-        # Puedes usar nombres de colores (ej. 'red', 'green', 'blue') o códigos hexadecimales ('#FF0000')
+             
             colors = ['blue', 'green', 'red', 'purple', 'orange']
-        # Asegúrate de no exceder el número de colores disponibles si tienes más puntos.
-        # Tomamos un subconjunto de colores si tenemos menos puntos que colores definidos
+        
             point_colors = colors[:len(puntos)]
-        # --- FIN DEL BLOQUE A AÑADIR ---
+        
             ax.scatter(x_coords, y_coords, z_coords, c=point_colors, marker='o', s=100)
 
             if len(puntos) >= 2:
@@ -116,7 +109,7 @@ def grafica_3d_view(request):
             error_message = "No se encontraron puntos válidos en el archivo para graficar."
 
         print(f"Puntos leídos desde {txt_file_path}: {puntos}")
-        print(f"Distancias calculadas: {distances}") # Para depuración en la terminal
+        print(f"Distancias calculadas: {distances}")
 
     except FileNotFoundError:
         error_message = f"Error: El archivo de puntos no se encontró en la ruta esperada: {txt_file_path}"
@@ -136,11 +129,9 @@ def grafica_3d_view(request):
     return render(request, 'calculo/grafica_3d.html', context)
 
 def ejecutar_main_view(request):
-    """
-    Vista para ejecutar el programa main() del módulo de cálculo numérico
-    """
+    
     if request.method == 'POST':
-        # Verificar el contador de ejecuciones
+        
         execution_count = request.session.get('execution_count', 0)
         max_executions = 5
         
@@ -149,22 +140,21 @@ def ejecutar_main_view(request):
             return redirect('calculo:grafica_3d')
         
         try:
-            # Obtener la ruta del proyecto
+            
             project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             main_script_path = os.path.join(project_root, 'src', 'main.py')
             
-            # Cambiar al directorio del proyecto para la ejecución
             original_cwd = os.getcwd()
             os.chdir(project_root)
             
             try:
-                # Ejecutar el script main.py usando subprocess
+                
                 result = subprocess.run([sys.executable, main_script_path], 
                                       capture_output=True, 
                                       text=True, 
                                       cwd=project_root)
                 
-                # Incrementar el contador de ejecuciones
+                
                 request.session['execution_count'] = execution_count + 1
                 request.session.save()
                 
@@ -178,7 +168,7 @@ def ejecutar_main_view(request):
                         messages.error(request, f'Errores: {result.stderr}')
                 
             finally:
-                # Restaurar el directorio de trabajo original
+                
                 os.chdir(original_cwd)
                 
         except Exception as e:
@@ -187,9 +177,7 @@ def ejecutar_main_view(request):
     return redirect('calculo:grafica_3d')
 
 def reset_execution_count_view(request):
-    """
-    Vista para reiniciar el contador de ejecuciones (útil para desarrollo/testing)
-    """
+    
     if request.method == 'POST':
         request.session['execution_count'] = 0
         request.session.save()
@@ -198,14 +186,9 @@ def reset_execution_count_view(request):
     return redirect('calculo:grafica_3d')
 
 def get_storage_files():
-    """
-    Obtiene la lista de archivos en la carpeta Storage con información adicional
-    
-    Returns:
-        list: Lista de diccionarios con información de archivos
-    """
+
     try:
-        # Obtener la ruta de Storage
+        
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         storage_path = os.path.join(project_root, 'src', 'Storage')
         
@@ -216,13 +199,13 @@ def get_storage_files():
         for filename in os.listdir(storage_path):
             file_path = os.path.join(storage_path, filename)
             
-            # Solo incluir archivos (no directorios)
+            
             if os.path.isfile(file_path):
-                # Obtener información del archivo
+                
                 stat = os.stat(file_path)
                 file_size = stat.st_size
                 
-                # Formatear el tamaño
+                
                 if file_size < 1024:
                     size_str = f"{file_size} B"
                 elif file_size < 1024 * 1024:
@@ -230,10 +213,8 @@ def get_storage_files():
                 else:
                     size_str = f"{file_size / (1024 * 1024):.1f} MB"
                 
-                # Obtener fecha de modificación
                 mod_time = datetime.datetime.fromtimestamp(stat.st_mtime)
                 
-                # Determinar el tipo de archivo
                 file_ext = os.path.splitext(filename)[1].lower()
                 if file_ext in ['.txt', '.log']:
                     file_type = 'Texto'
@@ -251,7 +232,6 @@ def get_storage_files():
                     'extension': file_ext
                 })
         
-        # Ordenar por fecha de modificación (más recientes primero)
         files_info.sort(key=lambda x: x['modified'], reverse=True)
         
         return files_info
@@ -260,32 +240,27 @@ def get_storage_files():
         return []
 
 def download_file_view(request, filename):
-    """
-    Vista para descargar archivos de la carpeta Storage
-    
-    Args:
-        filename: Nombre del archivo a descargar
-    """
+
     try:
-        # Obtener la ruta del archivo
+
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         storage_path = os.path.join(project_root, 'src', 'Storage')
         file_path = os.path.join(storage_path, filename)
         
-        # Verificar que el archivo existe y está dentro de Storage (seguridad)
+        
         if not os.path.exists(file_path) or not file_path.startswith(storage_path):
             raise Http404("Archivo no encontrado")
         
-        # Verificar que es un archivo (no directorio)
+        
         if not os.path.isfile(file_path):
             raise Http404("Archivo no encontrado")
         
-        # Determinar el tipo MIME
+        
         mime_type, _ = mimetypes.guess_type(file_path)
         if mime_type is None:
             mime_type = 'application/octet-stream'
         
-        # Leer el archivo
+        
         with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type=mime_type)
             response['Content-Disposition'] = f'attachment; filename="{filename}"'

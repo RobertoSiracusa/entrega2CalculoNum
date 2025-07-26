@@ -5,14 +5,8 @@ class archiveGenerator():
     __router = ""
     __nameArchive = ""
 
-    def __init__(self, nameArchive = "generalArchive.bin", router = os.getcwd()):#constructor polimorfico
-        """
-        Crear o modificar archivos. 
+    def __init__(self, nameArchive = "generalArchive.bin", router = os.getcwd()):
         
-        ->@param: string [archive.extension]
-        ->@param: string router = C:\\folder1\\folder2\\folder or "C:\folder\folder\folder" or C:/folder/folder/folder
-        ->@return: Void
-        """
         if (not router or len(router) == 0):
             raise Exception("Manage-Error: La ruta es vacia.")
         
@@ -23,39 +17,29 @@ class archiveGenerator():
         self.__utilDirectory(router)
 
     def setRouter(self, router):
-        """
-        Cambio de ruta existente
-
-        ->@param: string router = C:\\folder1\\folder2\\folder or "C:\folder\folder\folder" or C:/folder/folder/folder
-        ->@return: Void
-        """
+        
         if (not router or len(router) == 0):
             raise Exception("Manage-Error: La ruta es vacia.")
         self.utilDirectory(router)
 
     def setName(self, nameArchive):
-        """
-        Cambio de ruta existente
-
-        ->@param: string [archive.extension]
-        ->@return: Void
-        """
+        
         if (not nameArchive or len(nameArchive) == 0):
             raise Exception("Manage-Error: La ruta es vacia.")
         
-        self.__nameArchive= nameArchive #corregido mal setter
+        self.__nameArchive= nameArchive 
 
-    def __setOrCreateFiles(self, nameArchive, content = "", bool = False):#metodo polimorfico
+    def __setOrCreateFiles(self, nameArchive, content = "", bool = False):
         
         if (not nameArchive or len(nameArchive) == 0):
             raise Exception("Manage-Error: El nombre esta Vacio.")
         
-        try: #usamos try en este constexto ya que OPEN es un objeto externo a nuestra clase
+        try: 
             if (not content or len(content) == 0):
                 archive = open(self.__router+"\\"+nameArchive+".txt", "x")
                 return
             
-            archive = open(self.__router+"\\"+nameArchive, "a")#requiere que el nombre venga con su extencion. 
+            archive = open(self.__router+"\\"+nameArchive, "a")
             
             if (bool == True):
                 archive.write(content+"\n")
@@ -66,12 +50,7 @@ class archiveGenerator():
             print("Manage-Error: El archivo no ha sido encontrado", e)
 
     def archiveDataGenerator(self, row = 3, colum = 3):
-        """
-        Genera archivo con datos aleatorios.
-
-        ->@param: Float/Float [data default = 3]
-        ->@return: Void
-        """
+        
         arrayBi = []
 
         if(row > 0 and colum > 0):
